@@ -9,9 +9,11 @@ package render;
  *
  * @author BARIS
  */
-public class ScopeBase {
-    public String url;
-    public String query;
-    public String file;
-    public Object data;
+public class HTMLRenderDefault extends HTMLRenderBase {
+
+    @Override
+    protected String customReplacementMethod(String mn, Object[] args) {
+        return "Unknown method : "+mn;
+    }
+    
 }

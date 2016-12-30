@@ -7,8 +7,9 @@ package view;
 
 import javax.servlet.http.HttpServletResponse;
 import model.ModelBase;
-import render.HTMLRender;
-import render.ScopeBase;
+import render.HTMLRenderBase;
+import render.HTMLRenderDefault;
+import render.Scope;
 
 /**
  *
@@ -17,28 +18,43 @@ import render.ScopeBase;
 public class HtmlView extends ViewBase {
 
     private final String file;
-    
-    public HtmlView(String htmlFilePath,ModelBase m) {        
-        super(m);
-        file = htmlFilePath;
-    }
+    private HTMLRenderBase render;
     
     public HtmlView(String htmlFilePath) {
         super(null);
         file = htmlFilePath;
+        setRender( new HTMLRenderDefault() );
     }
+    
+    public HtmlView(String htmlFilePath,ModelBase model) {        
+        super(model);
+        file = htmlFilePath;
+        setRender( new HTMLRenderDefault() );
+    }
+    
+    public HtmlView(String htmlFilePath,ModelBase model,HTMLRenderBase render) {
+        super(model);
+        file = htmlFilePath;
+        setRender(render);
+    }        
 
+    public final void setRender( HTMLRenderBase render ) {
+        this.render = render;
+    }
+    
     @Override
     protected void showContent(Object data) {
         
-        ScopeBase scope = new ScopeBase();
+        Scope scope = new Scope();
         
         scope.data = data;
         scope.file = file;
         scope.url = getRequest().getRequestURL().toString();
         scope.query = getRequest().getQueryString();
                 
-        HTMLRender render = new HTMLRender(scope,getController().getServletContext());
+        render.setContext( getController().getServletContext() );
+        render.setScope(scope);
+        
         
         HttpServletResponse r = getResponse();
         r.setContentType("text/html;charset=UTF-8");        

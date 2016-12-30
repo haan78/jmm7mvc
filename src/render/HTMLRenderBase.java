@@ -1,11 +1,11 @@
 package render;
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -21,22 +21,21 @@ import javax.servlet.ServletContext;
  *
  * @author BARIS
  */
-public final class HTMLRender {
+public abstract class HTMLRenderBase {
 
-    private final Object scope;
-    private final HTMLRenderMethods functions;
+    private Object scope;
     private ServletContext context;
 
-    public HTMLRender(Object scope, ServletContext context) {
+    public HTMLRenderBase(Scope scope, ServletContext context) {
         this.scope = scope;
-        setContext(context);
-        functions = new HTMLRenderMethods();
+        this.context = context;
     }
-
-    public HTMLRender(Object scope, ServletContext context, HTMLRenderMethods functions) {
+    
+    public HTMLRenderBase (){
+    }
+    
+    public void setScope( Scope scope ) {
         this.scope = scope;
-        setContext(context);
-        this.functions = functions;
     }
     
     public void setContext(ServletContext context) {
@@ -96,12 +95,16 @@ public final class HTMLRender {
         
         if ( ("LOAD".equals(mn)) && (args.length>0) ) {
             return executeFile( args[0].toString() );
+        } else if ( ("JVAR".equals(mn)) && ( args.length > 1 ) ) {                        
+            return "var "+(String)args[0]+" = "+(new Gson()).toJson(args[1])+";";
+        } else if ( ("ECHO".equals(mn)) && ( args.length > 0 ) ) {
+            return (String)args[0];
         } else {
-            Method method = functions.getClass().getDeclaredMethod(mn, new Class[0]);
-            functions.setParameters(args);
-            return method.invoke(functions).toString();
-        }
+            return customReplacementMethod(mn, args);
+        }        
     }
+    
+    protected abstract String customReplacementMethod( String mn, Object[] args );
     
     private String getFileAsString(ServletContext contx, String path) throws IOException {
         StringBuilder sb = new StringBuilder();        
