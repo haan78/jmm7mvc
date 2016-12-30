@@ -38,8 +38,4 @@ public class HTMLRenderMethods {
     public String ECHO() {
         return (String)getParameters()[0];
     }
-    
-    public String LOAD(String file) {
-        return file;
-    }
 }

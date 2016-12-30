@@ -93,11 +93,14 @@ public final class HTMLRender {
         for (int i = 1; i < attributes.length; i++) {
             args[i-1] = getValue(attributes[i]);
         }
-
-        Method method = functions.getClass().getDeclaredMethod(mn, new Class[0]);
-        functions.setParameters(args);
-        return method.invoke(functions).toString();
-
+        
+        if ( ("LOAD".equals(mn)) && (args.length>0) ) {
+            return executeFile( args[0].toString() );
+        } else {
+            Method method = functions.getClass().getDeclaredMethod(mn, new Class[0]);
+            functions.setParameters(args);
+            return method.invoke(functions).toString();
+        }
     }
     
     private String getFileAsString(ServletContext contx, String path) throws IOException {
