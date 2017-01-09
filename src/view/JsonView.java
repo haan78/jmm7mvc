@@ -2,8 +2,6 @@ package view;
 
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 import model.ModelBase;
 
