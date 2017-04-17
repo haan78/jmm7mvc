@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,6 +26,7 @@ public abstract class HTMLRenderBase {
 
     private Object scope;
     private ServletContext context;
+    private HttpSession session;
 
     public HTMLRenderBase(Scope scope, ServletContext context) {
         this.scope = scope;
@@ -36,6 +38,10 @@ public abstract class HTMLRenderBase {
     
     public void setScope( Scope scope ) {
         this.scope = scope;
+    }
+    
+    public void setSession(HttpSession session) {
+        this.session = session;
     }
     
     public void setContext(ServletContext context) {
@@ -57,7 +63,7 @@ public abstract class HTMLRenderBase {
         Object elm = scope;
         for (String fn : arr) {
             try {
-                Field f = elm.getClass().getDeclaredField(fn);
+                Field f = elm.getClass().getDeclaredField(fn);                
                 elm = f.get(elm);
             } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException ex) {
                 return null;
@@ -99,6 +105,8 @@ public abstract class HTMLRenderBase {
             return "var "+(String)args[0]+" = "+(new Gson()).toJson(args[1])+";";
         } else if ( ("ECHO".equals(mn)) && ( args.length > 0 ) ) {
             return (String)args[0];
+        } if ( ("SESSION".equals(mn)) && ( args.length > 0 ) ) {
+            return session.getAttribute((String)args[0]).toString();
         } else {
             return customReplacementMethod(mn, args);
         }        

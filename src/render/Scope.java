@@ -5,7 +5,7 @@
  */
 package render;
 
-import java.util.Map;
+import javax.servlet.http.HttpSession;
 
 
 
@@ -16,7 +16,6 @@ import java.util.Map;
 public class Scope {
     public String url;
     public String query;
-    public String file;
-    public Map<String, Object> session;
+    public String file;    
     public Object data;
 }

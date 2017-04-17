@@ -54,27 +54,16 @@ public class HtmlView extends ViewBase {
         scope.data = data;
         scope.file = file;
         scope.url = getRequest().getRequestURL().toString();
-        scope.query = getRequest().getQueryString();      
-        
+        scope.query = getRequest().getQueryString();            
                 
         render.setContext( getController().getServletContext() );
         render.setScope(scope);
-        
-        HttpSession s = getRequest().getSession();
-        if ( s != null ) {
-             scope.session = new HashMap<>();
-             Enumeration<String> names = s.getAttributeNames();
-             while (names.hasMoreElements()) {
-                String nextElement = names.nextElement();
-                scope.session.put(nextElement,s.getAttribute(nextElement));
-            }
-        }
-        
-        HttpServletResponse r = getResponse();      
-        
+        render.setSession( getRequest().getSession() );
+
+        HttpServletResponse r = getResponse();
         
         r.setContentType("text/html;charset=UTF-8");        
-        try {            
+        try {
             r.getWriter().print( render.executeFile(file ) );
         } catch (Exception ex) {
             showError(ex);
