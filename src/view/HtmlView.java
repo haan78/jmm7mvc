@@ -5,7 +5,11 @@
  */
 package view;
 
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.ModelBase;
 import render.HTMLRenderBase;
 import render.HTMLRenderDefault;
@@ -50,13 +54,25 @@ public class HtmlView extends ViewBase {
         scope.data = data;
         scope.file = file;
         scope.url = getRequest().getRequestURL().toString();
-        scope.query = getRequest().getQueryString();
+        scope.query = getRequest().getQueryString();      
+        
                 
         render.setContext( getController().getServletContext() );
         render.setScope(scope);
         
+        HttpSession s = getRequest().getSession();
+        if ( s != null ) {
+             scope.session = new HashMap<>();
+             Enumeration<String> names = s.getAttributeNames();
+             while (names.hasMoreElements()) {
+                String nextElement = names.nextElement();
+                scope.session.put(nextElement,s.getAttribute(nextElement));
+            }
+        }
         
-        HttpServletResponse r = getResponse();
+        HttpServletResponse r = getResponse();      
+        
+        
         r.setContentType("text/html;charset=UTF-8");        
         try {            
             r.getWriter().print( render.executeFile(file ) );
