@@ -53,7 +53,7 @@ public abstract class HTMLRenderBase {
     }
 
     private Object subElement(String varName) {
-        String[] arr = varName.split(".");
+        String[] arr = varName.split("\\.");
         
         if ( arr.length == 0 ) {
             arr = new String[1];
