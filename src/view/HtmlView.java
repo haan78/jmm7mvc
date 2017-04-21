@@ -54,11 +54,12 @@ public class HtmlView extends ViewBase {
         scope.data = data;
         scope.file = file;
         scope.url = getRequest().getRequestURL().toString();
-        scope.query = getRequest().getQueryString();            
+        scope.query = getRequest().getQueryString();
+        scope.session =  getRequest().getSession();
                 
         render.setContext( getController().getServletContext() );
         render.setScope(scope);
-        render.setSession( getRequest().getSession() );
+        
 
         HttpServletResponse r = getResponse();
         

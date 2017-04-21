@@ -18,4 +18,5 @@ public class Scope {
     public String query;
     public String file;    
     public Object data;
+    public HttpSession session;
 }
