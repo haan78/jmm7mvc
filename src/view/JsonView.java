@@ -38,7 +38,7 @@ public final class JsonView extends ViewBase {
     @Override
     protected void showContent(Object data) {
         Gson g;
-        if ( dateformat!=null ) {
+        if ( (dateformat!=null) && (!dateformat.isEmpty()) ) {
             g = new GsonBuilder().setDateFormat(dateformat).create();
         } else {
             g = new Gson();
