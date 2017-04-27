@@ -1,6 +1,7 @@
 package view;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import model.ModelBase;
@@ -15,15 +16,34 @@ import model.ModelBase;
  *
  * @author BARIS
  */
-public class JsonView extends ViewBase {
+public final class JsonView extends ViewBase {
 
+    private String dateformat = "yyyy-MM-dd HH:mm:ss";
+    
     public JsonView(ModelBase m) {
         super(m);
     }
+    
+    public JsonView(ModelBase m, String dateFormat) {
+        super(m);
+        setDateformat(dateFormat);
+    }
+
+    public void setDateformat(String dateformat) {
+        this.dateformat = dateformat;
+    }
+    
+    
 
     @Override
     protected void showContent(Object data) {
-        Gson g = new Gson();
+        Gson g;
+        if ( dateformat!=null ) {
+            g = new GsonBuilder().setDateFormat(dateformat).create();
+        } else {
+            g = new Gson();
+        }
+        
         try {
             HttpServletResponse r = getResponse();
             r.setHeader("Content-Type", "application/json; charset=utf-8");
