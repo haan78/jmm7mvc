@@ -72,7 +72,7 @@ public abstract class ViewBase {
                 Object data = model.perform();
 
                 if (autView) {
-                    if (model.isAborted()) {
+                    if (model.isRejected()) {
                         showContent(data);
                         return false;
                     }

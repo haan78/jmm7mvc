@@ -22,11 +22,11 @@ public abstract class ModelBase {
     private boolean aborted = false;
     private HttpServletRequest reguest;
 
-    public boolean isAborted() {
+    public boolean isRejected() {
         return aborted;
     }
 
-    protected void abort() {
+    protected void reject() {
         this.aborted = true;
     }
 
