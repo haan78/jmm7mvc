@@ -58,6 +58,11 @@ public abstract class ModelBase {
         Gson g = new Gson();
         return (JsonElement)g.fromJson(getStringRequest(), JsonElement.class );
     }
+    
+    protected final JsonElement getJsonRequest(String dateFormat) throws IOException {
+        Gson g = new com.google.gson.GsonBuilder().setDateFormat(dateFormat).create();
+        return (JsonElement)g.fromJson(getStringRequest(), JsonElement.class );        
+    }
 
     public final void setRequest(HttpServletRequest request) {
         this.reguest = request;
