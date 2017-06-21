@@ -18,7 +18,7 @@ import model.ModelBase;
  *
  * @author BARIS
  */
-public final class JsonView extends ViewBase {
+public class JsonView extends ViewBase {
 
     private String dateformat = "yyyy-MM-dd HH:mm:ss";
     
@@ -28,27 +28,28 @@ public final class JsonView extends ViewBase {
     
     public JsonView(ModelBase m, String dateFormat) {
         super(m);
-        setDateformat(dateFormat);
+        this.dateformat = dateFormat;
     }
 
     public void setDateformat(String dateformat) {
         this.dateformat = dateformat;
     }
+
+    public String getDateformat() {
+        return dateformat;
+    }    
     
     @Override
     protected void showError(Exception ex) {
         
-        Gson g;
-        if ( (dateformat!=null) && (!dateformat.isEmpty()) ) {
-            g = new GsonBuilder().setDateFormat(dateformat).create();
-        } else {
-            g = new Gson();
-        }
+        String mess;
+        
+        mess = ex.getCause().getMessage().replaceAll("\n","").replaceAll("\r","").replaceAll("\"","");
         
         HttpServletResponse r = getResponse();
         r.setHeader("Content-Type", "application/json; charset=utf-8");
         try {
-            r.getWriter().print("{ \"type\":\"error\", \"message\":\""+ex.toString()+"\" }");
+            r.getWriter().print("{ \"type\":\"error\", \"message\":\""+mess+"\" }");
         } catch (IOException ex1) {
             Logger.getLogger(JsonView.class.getName()).log(Level.SEVERE, null, ex1);
         }

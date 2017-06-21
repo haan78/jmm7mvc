@@ -5,6 +5,8 @@ import controller.ControllerBase;
 import model.ModelBase;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -66,6 +68,7 @@ public abstract class ViewBase {
     }
 
     public final boolean perform() {
+
         try {
             if (model != null) {
                 model.setRequest(request);

@@ -1,11 +1,9 @@
 package model;
 
 
-import model.ModelBase;
-import java.lang.reflect.InvocationTargetException;
+
 import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
