@@ -92,16 +92,14 @@ public abstract class ViewBase {
         return true;
     }
 
-    protected void showError(Exception ex) {
+    protected void showError(Throwable ex) {
         PrintWriter w = null;
         try {
             w = getResponse().getWriter();
-            w.println(ex.toString());
-            w.println(ex.getMessage());            
+            w.println(ex.getCause().getMessage());
         } catch (IOException ex1) {
-            if (w != null) {
-                w.println(ex1.toString());
-                w.println(ex1.getMessage());
+            if (w != null) {                
+                w.println(ex.getCause().getMessage());
             }
         }
     }

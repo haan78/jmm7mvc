@@ -40,7 +40,7 @@ public class JsonView extends ViewBase {
     }    
     
     @Override
-    protected void showError(Exception ex) {
+    protected void showError(Throwable ex) {
         
         String mess;
         
