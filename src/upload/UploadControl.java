@@ -29,18 +29,18 @@ public class UploadControl {
         return "";
     }
 
-    public void chek( Part p ) throws UnexpectedUploadException {
-        if ( p.getSize() > maximumSize ) throw new UnexpectedUploadException("Uploaded file size is too big");
-        if ( p.getSize() < minimumSize ) throw new UnexpectedUploadException("Uploaded file size is too small");
+    public void chek( Part p ) throws IllegalUploadException {
+        if ( p.getSize() > maximumSize ) throw new IllegalUploadException("Uploaded file size is too big");
+        if ( p.getSize() < minimumSize ) throw new IllegalUploadException("Uploaded file size is too small");
         if ( (allowedExtensions!= null) && ( allowedExtensions.length>0 ) ) {
             for (int i=0; i<allowedExtensions.length; i++) {
                 if ( getExtension(p).equals(allowedExtensions[i]) ) return;
             }
-            throw new UnexpectedUploadException("Uploaded file extension is not allowed");
+            throw new IllegalUploadException("Uploaded file extension is not allowed");
         }
         if ( (notAllowedExtensions !=null) && (notAllowedExtensions.length>0) ) {
             for (int i=0; i<allowedExtensions.length; i++) {
-                if ( getExtension(p).equals(notAllowedExtensions[i]) ) throw new UnexpectedUploadException("Uploaded file extension is not allowed");
+                if ( getExtension(p).equals(notAllowedExtensions[i]) ) throw new IllegalUploadException("Uploaded file extension is not allowed");
             }
         }
     }

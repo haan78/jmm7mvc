@@ -9,9 +9,9 @@ package upload;
  *
  * @author BARIS
  */
-public class UnexpectedUploadException extends Exception {
+public class IllegalUploadException extends Exception {
 
-    public UnexpectedUploadException(String message) {
+    public IllegalUploadException(String message) {
         super(message);
     }
     

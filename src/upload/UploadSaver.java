@@ -55,7 +55,7 @@ public class UploadSaver {
         return getPart(pName).getSize();
     }
     
-    private void save(Part p,String fName) throws FileNotFoundException, IOException, UnexpectedUploadException {
+    private void save(Part p,String fName) throws FileNotFoundException, IOException, IllegalUploadException {
         
         control.chek(p);
         
@@ -72,11 +72,11 @@ public class UploadSaver {
         content.close();
     }
     
-    public void saveBySubmittedName(String pName,String folder) throws IOException, FileNotFoundException, UnexpectedUploadException {
+    public void saveBySubmittedName(String pName,String folder) throws IOException, FileNotFoundException, IllegalUploadException {
         save( getPart(pName) ,folder + File.separator + getName(pName) );
     }
     
-    public String saveByTimeStamp(String pName,String folder,String prefix) throws IOException, FileNotFoundException, UnexpectedUploadException {
+    public String saveByTimeStamp(String pName,String folder,String prefix) throws IOException, FileNotFoundException, IllegalUploadException {
         String name = prefix;
         
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
@@ -91,7 +91,7 @@ public class UploadSaver {
         return name;
     }
     
-    public void saveByNewName(String pName,String folder,String newName) throws IOException, FileNotFoundException, UnexpectedUploadException {
+    public void saveByNewName(String pName,String folder,String newName) throws IOException, FileNotFoundException, IllegalUploadException {
         save(getPart(pName), folder + File.separator +newName+"."+UploadControl.getExtension(getPart(pName)) );
     }
     
