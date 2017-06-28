@@ -2,11 +2,11 @@ package model;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 /*
@@ -44,7 +44,7 @@ public abstract class ModelBase {
         return reguest;
     }
 
-    protected final String getStringRequest() throws IOException {
+    protected final String getStringRequest(String encoding) throws IOException {
         //StringBuilder stringBuilder = new StringBuilder();
 
 
@@ -60,23 +60,19 @@ public abstract class ModelBase {
             while ((length = inputStream.read(buffer)) != -1) {
                 result.write(buffer, 0, length);
             }
-            sr = result.toString("UTF-8");
-            /*try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-                char[] charBuffer = new char[128];
-                int bytesRead;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            }*/
+            sr = result.toString(encoding);
         } else {
             //stringBuilder.append("");
             sr = "";
         }       
         getRequest().setAttribute("com.xp.input",sr);
         return sr;
-        //return stringBuilder.toString();                
-        
-    }   
+        //return stringBuilder.toString();
+    }
+    
+    protected final String getStringRequest() throws IOException {
+        return getStringRequest("UTF-8");
+    }
     
     protected final JsonElement getJsonRequest() throws IOException {
         Gson g = new com.google.gson.GsonBuilder().setDateFormat(defaultJsonDateFormat).create();
