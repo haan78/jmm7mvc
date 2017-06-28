@@ -81,22 +81,18 @@ public class UploadSaver {
         
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         
-        name+=timeStamp;
-        
-        String fname = getName(pName);
-        String ext = "";
-
-        int i = fname.lastIndexOf('.');
-        if ( (i > 0) && ( i<fname.length() ) ) {
-            ext = fname.substring(i+1);
-        }       
+        name+=timeStamp;       
        
         name+=".";
-        name += ext.toLowerCase();
+        name +=  UploadControl.getExtension(getPart(pName));
         
         save(getPart(pName), folder + File.separator +name);
         
         return name;
+    }
+    
+    public void saveByNewName(String pName,String folder,String newName) throws IOException, FileNotFoundException, UnexpectedUploadException {
+        save(getPart(pName), folder + File.separator +newName+"."+UploadControl.getExtension(getPart(pName)) );
     }
     
     
