@@ -22,12 +22,12 @@ import javax.servlet.http.Part;
  *
  * @author BARIS
  */
-public class Uploader {
+public class UploadSaver {
     private final Collection<Part> uploads;
     private UploadControl control;
     
 
-    public Uploader(HttpServletRequest request, UploadControl control ) throws IOException, ServletException {
+    public UploadSaver(HttpServletRequest request, UploadControl control ) throws IOException, ServletException {
         this.uploads = request.getParts();        
         this.control = control;
     }
@@ -77,7 +77,7 @@ public class Uploader {
     }
     
     public String saveByTimeStamp(String pName,String folder,String prefix) throws IOException, FileNotFoundException, UnexpectedUploadException {
-        String name = folder + File.separator + prefix;
+        String name = prefix;
         
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         
@@ -94,7 +94,7 @@ public class Uploader {
         name+=".";
         name += ext.toLowerCase();
         
-        save(getPart(pName), name);
+        save(getPart(pName), folder + File.separator +name);
         
         return name;
     }
