@@ -24,7 +24,7 @@ public class UploadControl {
     private String getExtension(Part p) {
         int i = p.getSubmittedFileName().lastIndexOf('.');
         if ( (i > 0) && ( i<p.getSubmittedFileName().length() ) ) {
-            return p.getSubmittedFileName().substring(i+1);
+            return p.getSubmittedFileName().substring(i+1).toLowerCase();
         }
         return "";
     }
