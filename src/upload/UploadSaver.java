@@ -12,10 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
 /**
@@ -23,12 +21,12 @@ import javax.servlet.http.Part;
  * @author BARIS
  */
 public class UploadSaver {
-    private final Collection<Part> uploads;
+    private final Part part;
     private UploadControl control;
     
 
-    public UploadSaver(HttpServletRequest request, UploadControl control ) throws IOException, ServletException {
-        this.uploads = request.getParts();        
+    public UploadSaver(Part part, UploadControl control ) throws IOException, ServletException {
+        this.part = part;        
         this.control = control;
     }
 
@@ -38,29 +36,14 @@ public class UploadSaver {
 
     public UploadControl getControl() {
         return control;
-    }    
-    
-    private Part getPart(String pName) {
-        for ( Part p : uploads ) {
-            if (p.getName().equals(pName)) return p;
-        }
-        return null;
     }
     
-    public String getName(String pName) {
-        return getPart(pName).getSubmittedFileName();
-    }
-    
-    public long getSize(String pName) {
-        return getPart(pName).getSize();
-    }
-    
-    private void save(Part p,String fName) throws FileNotFoundException, IOException, IllegalUploadException {
+    private void save(String fName) throws FileNotFoundException, IOException, IllegalUploadException {
         
-        control.chek(p);
+        control.chek(part);
         
         OutputStream out = new FileOutputStream(fName);        
-        InputStream content = p.getInputStream();
+        InputStream content = part.getInputStream();
         
         int read;
         byte[] bytes = new byte[1024];
@@ -72,27 +55,24 @@ public class UploadSaver {
         content.close();
     }
     
-    public void saveBySubmittedName(String pName,String folder) throws IOException, FileNotFoundException, IllegalUploadException {
-        save( getPart(pName) ,folder + File.separator + getName(pName) );
+    public String saveBySubmittedName(String folder) throws IOException, FileNotFoundException, IllegalUploadException {
+        String fname = part.getSubmittedFileName();
+        save( folder + File.separator + fname );
+        return fname;
     }
     
-    public String saveByTimeStamp(String pName,String folder,String prefix) throws IOException, FileNotFoundException, IllegalUploadException {
-        String name = prefix;
+    public String saveByTimeStamp(String folder,String prefix) throws IOException, FileNotFoundException, IllegalUploadException {        
         
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String fname = prefix + (new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()))+"."+UploadControl.getExtension(part);
+        save(folder + File.separator +fname);
         
-        name+=timeStamp;       
-       
-        name+=".";
-        name +=  UploadControl.getExtension(getPart(pName));
-        
-        save(getPart(pName), folder + File.separator +name);
-        
-        return name;
+        return fname;
     }
     
-    public void saveByNewName(String pName,String folder,String newName) throws IOException, FileNotFoundException, IllegalUploadException {
-        save(getPart(pName), folder + File.separator +newName+"."+UploadControl.getExtension(getPart(pName)) );
+    public String saveByNewName(String folder,String newName) throws IOException, FileNotFoundException, IllegalUploadException {
+        String fName = newName+"."+UploadControl.getExtension(part);
+        save( folder + File.separator + fName );
+        return fName;
     }
     
     
