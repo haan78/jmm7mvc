@@ -103,7 +103,11 @@ public abstract class HTMLRenderBase {
         } else if ( ("JVAR".equals(mn)) && ( args.length > 1 ) ) {                        
             return "var "+(String)args[0]+" = "+(new Gson()).toJson(args[1])+";";
         } else if ( ("ECHO".equals(mn)) && ( args.length > 0 ) ) {
-            return (String)args[0];
+            if ( args[0] != null ) {
+                return (String)args[0];
+            } else {
+                return "";
+            }            
         } else {
             return customReplacementMethod(mn, args);
         }        
