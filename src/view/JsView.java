@@ -67,7 +67,7 @@ public class JsView extends ViewBase {
         
         HttpServletResponse r = getResponse();
         r.setCharacterEncoding(encoding);
-        r.setContentType("Content-type: application/javascript");
+        r.setContentType("application/javascript");
         try {            
             r.getWriter().println( getFileAsString( getController().getServletContext(),file ) );
             r.getWriter().println( "var "+jsVariable+" = "+gson.toJson(data));
