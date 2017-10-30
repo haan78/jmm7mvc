@@ -24,17 +24,23 @@ public class JsView extends ViewBase {
     private Gson gson;
     private String jsVariable;
 
-    public JsView(String jsFilePath,Gson gson,String jsVariable,ModelBase m) {
+    public JsView(ModelBase m,String jsFilePath,Gson gson,String jsVariable) {
         super(m);
         this.gson = gson;
         this.file = jsFilePath;
         this.jsVariable = jsVariable;
-    }
-    
-    public JsView(String jsFilePath,ModelBase m) {
+    }    
+    public JsView(ModelBase m,String jsFilePath) {
         super(m);
         gson = GsonView.CreateGson(true, "yyyy-MM-dd HH:mm:ss");
         this.file = jsFilePath;
+        jsVariable = getClass().getName();
+    }
+    
+    public JsView(ModelBase m) {
+        super(m);        
+        gson = GsonView.CreateGson(true, "yyyy-MM-dd HH:mm:ss");
+        this.file = "";
         jsVariable = getClass().getName();
     }
 
@@ -49,18 +55,6 @@ public class JsView extends ViewBase {
     public void setJsVariable(String jsVariable) {
         this.jsVariable = jsVariable;
     }
-    
-    private String getFileAsString(ServletContext contx, String path) throws IOException {
-        StringBuilder sb = new StringBuilder();        
-        InputStream is = contx.getResourceAsStream(path);
-        InputStreamReader sr = new InputStreamReader(is);
-        BufferedReader br = new BufferedReader(sr);
-        String line;
-        while ( (line = br.readLine() ) != null ) {
-            sb.append(line).append("\n");
-        }
-        return sb.toString();
-    }
 
     @Override
     protected void showContent(Object data) {              
@@ -69,8 +63,10 @@ public class JsView extends ViewBase {
         r.setCharacterEncoding(encoding);
         r.setContentType("application/javascript");
         try {            
-            r.getWriter().println( getFileAsString( getController().getServletContext(),file ) );
-            r.getWriter().println( "var "+jsVariable+" = "+gson.toJson(data));
+            r.getWriter().println( "var "+jsVariable+" = "+gson.toJson(data)+";");
+            if ( !"".equals(file) ) {
+                r.getWriter().println( controller.ControllerBase.getFileAsString( getController().getServletContext(),file ) );
+            }
             
         } catch (Exception ex) {
             showError(ex);

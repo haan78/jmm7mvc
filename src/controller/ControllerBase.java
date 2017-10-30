@@ -6,8 +6,12 @@ package controller;
  * and open the template in the editor.
  */
 
+import java.io.BufferedReader;
 import view.ViewBase;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +47,18 @@ public abstract class ControllerBase extends HttpServlet {
     }   
     
     protected abstract void configure(String pathInfo);
+    
+    public static String getFileAsString(ServletContext contx, String path) throws IOException {
+        StringBuilder sb = new StringBuilder();        
+        InputStream is = contx.getResourceAsStream(path);
+        InputStreamReader sr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(sr);
+        String line;
+        while ( (line = br.readLine() ) != null ) {
+            sb.append(line).append("\n");
+        }
+        return sb.toString();
+    }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

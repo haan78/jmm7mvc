@@ -115,18 +115,6 @@ public abstract class HTMLRenderBase {
     
     protected abstract String customReplacementMethod( String mn, Object[] args );
     
-    private String getFileAsString(ServletContext contx, String path) throws IOException {
-        StringBuilder sb = new StringBuilder();        
-        InputStream is = contx.getResourceAsStream(path);
-        InputStreamReader sr = new InputStreamReader(is);
-        BufferedReader br = new BufferedReader(sr);
-        String line;
-        while ( (line = br.readLine() ) != null ) {
-            sb.append(line).append("\n");
-        }
-        return sb.toString();
-    }
-    
     public String executeContent(String content) throws Exception {
         String reg1 = "\\<\\!\\-\\-\\[(.*?)\\]\\-\\-\\>|\\/\\*\\[(.*?)\\]\\*\\/";
         String c = content;
@@ -153,7 +141,7 @@ public abstract class HTMLRenderBase {
     }
 
     public String executeFile( String file ) throws Exception {
-        return executeContent(getFileAsString(context, file));        
+        return executeContent( controller.ControllerBase.getFileAsString(context, file));
     }
 
 }
